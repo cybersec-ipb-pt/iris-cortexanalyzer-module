@@ -1,22 +1,11 @@
 #!/usr/bin/env python3
-#
-#
-#  IRIS cortexanalyzer Source Code
-#  Copyright (C) 2023 - SOCFortress
-#  info@socfortress.co
-#  Created by SOCFortress - 2023-03-06
-#
-#  License MIT
 
 module_name = "Cortex Analyzer"
-module_description = "Integrate with Cortex and run any Analyzer. Anaylzer must be enabled within Cortex."
-interface_version = 1.1
-module_version = 1.0
-
+module_description = "Integrate with Cortex and run any Analyzer. Anaylzers must be enabled within Cortex."
+interface_version = 1.2
+module_version = 1.1
 pipeline_support = False
 pipeline_info = {}
-
-
 module_configuration = [
     {
         "param_name": "cortexanalyze_url",
@@ -37,8 +26,8 @@ module_configuration = [
     {
         "param_name": "cortexanalyze_analyzer",
         "param_human_name": "Cortex Analyzer",
-        "param_description": "Cortex Analyzer to run - I.E VirusTotal_GetReport_3_0",
-        "default": "VirusTotal_GetReport_3_0",
+        "param_description": "Cortex Analyzers to run, separated by commas - I.E VirusTotal_GetReport_3_1,DShield_lookup_1_0",
+        "default": "VirusTotal_GetReport_3_1",
         "mandatory": True,
         "type": "string",
     },    
@@ -78,15 +67,14 @@ module_configuration = [
         "mandatory": True,
         "type": "bool",
         "section": "Insights"
-    },# TODO: careful here, remove backslashes from \{\{ results| tojson(indent=4) \}\}
+    },
     {
         "param_name": "cortexanalyzer_domain_report_template",
         "param_human_name": "Cortex Analyzer report template",
         "param_description": "Cortex Analyzer template used to add a new custom attribute to the target IOC",
-        "default": "<div class=\"row\">\n    <div class=\"col-12\">\n        <div class=\"accordion\">\n            <h2 class=\"text-center\"><a href=\"https://www.socfortress.co/contact_form.html\">SOCFortress Professional Services</a></h2>\n            <h3>Cortex Analyzer raw results</h3>\n\n            <div class=\"card\">\n                <div class=\"card-header collapsed\" id=\"drop_r_cortexanalyzer\" data-toggle=\"collapse\" data-target=\"#drop_raw_cortexanalyzer\" aria-expanded=\"false\" aria-controls=\"drop_raw_cortexanalyzer\" role=\"button\">\n                    <div class=\"span-icon\">\n                        <div class=\"flaticon-file\"></div>\n                    </div>\n                    <div class=\"span-title\">\n                        Cortex Analyzer results\n                    </div>\n                    <div class=\"span-mode\"></div>\n                </div>\n                <div id=\"drop_raw_cortexanalyzer\" class=\"collapse\" aria-labelledby=\"drop_r_cortexanalyzer\" style=\"\">\n                    <div class=\"card-body\">\n                        <div id='cortexanalyzer_raw_ace'>{{ results| tojson(indent=4) }}</div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div> \n<script>\nvar cortexanalyzer_in_raw = ace.edit(\"cortexanalyzer_raw_ace\",\n{\n    autoScrollEditorIntoView: true,\n    minLines: 30,\n});\ncortexanalyzer_in_raw.setReadOnly(true);\ncortexanalyzer_in_raw.setTheme(\"ace/theme/tomorrow\");\ncortexanalyzer_in_raw.session.setMode(\"ace/mode/json\");\ncortexanalyzer_in_raw.renderer.setShowGutter(true);\ncortexanalyzer_in_raw.setOption(\"showLineNumbers\", true);\ncortexanalyzer_in_raw.setOption(\"showPrintMargin\", false);\ncortexanalyzer_in_raw.setOption(\"displayIndentGuides\", true);\ncortexanalyzer_in_raw.setOption(\"maxLines\", \"Infinity\");\ncortexanalyzer_in_raw.session.setUseWrapMode(true);\ncortexanalyzer_in_raw.setOption(\"indentedSoftWrap\", true);\ncortexanalyzer_in_raw.renderer.setScrollMargin(8, 5);\n</script> ",
+        "default": "<div class=\"row\">\n    <div class=\"col-12\">\n        <div class=\"accordion\">\n\n            <div class=\"card\">\n                <div class=\"card-header collapsed\" id=\"drop_r_cortexanalyzer\" data-toggle=\"collapse\" data-target=\"#drop_raw_cortexanalyzer\" aria-expanded=\"false\" aria-controls=\"drop_raw_cortexanalyzer\" role=\"button\">\n                    <div class=\"span-icon\">\n                        <div class=\"flaticon-file\"></div>\n                    </div>\n                    <div class=\"span-title\">\n                        Cortex Analyzer results\n                    </div>\n                    <div class=\"span-mode\"></div>\n                </div>\n                <div id=\"drop_raw_cortexanalyzer\" class=\"collapse\" aria-labelledby=\"drop_r_cortexanalyzer\" style=\"\">\n                    <div class=\"card-body\">\n                        <div id='cortexanalyzer_raw_ace'>{{ results| tojson(indent=4) }}</div>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div> \n<script>\nvar cortexanalyzer_in_raw = ace.edit(\"cortexanalyzer_raw_ace\",\n{\n    autoScrollEditorIntoView: true,\n    minLines: 30,\n});\ncortexanalyzer_in_raw.setReadOnly(true);\ncortexanalyzer_in_raw.setTheme(\"ace/theme/tomorrow\");\ncortexanalyzer_in_raw.session.setMode(\"ace/mode/json\");\ncortexanalyzer_in_raw.renderer.setShowGutter(true);\ncortexanalyzer_in_raw.setOption(\"showLineNumbers\", true);\ncortexanalyzer_in_raw.setOption(\"showPrintMargin\", false);\ncortexanalyzer_in_raw.setOption(\"displayIndentGuides\", true);\ncortexanalyzer_in_raw.setOption(\"maxLines\", \"Infinity\");\ncortexanalyzer_in_raw.session.setUseWrapMode(true);\ncortexanalyzer_in_raw.setOption(\"indentedSoftWrap\", true);\ncortexanalyzer_in_raw.renderer.setScrollMargin(8, 5);\n</script> ",
         "mandatory": False,
         "type": "textfield_html",
         "section": "Templates"
     }
-    
 ]

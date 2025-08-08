@@ -1,226 +1,229 @@
-[<img src="images/logo_orange.svg" align="right" width="100" height="100" />](https://www.socfortress.co/)
+# DFIR-IRIS Cortex Analyzers Module 
 
-# Cortex Analyzer Module [![Awesome](https://img.shields.io/badge/SOCFortress-Worlds%20First%20Free%20Cloud%20SOC-orange)](https://www.socfortress.co/trial.html)
-> Quickly integrate DFIR-IRIS with Cortex to run any Cortex Analyzer.
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](./LICENSE)
 
+`iris-cortexanalyzer-module` is an IRIS pipeline/processor module created with [dfir-iris/iris-skeleton-module](https://github.com/dfir-iris/iris-skeleton-module). This version of the module is a fork from [socfortress/iris-cortexanalyzer-module](https://github.com/socfortress/iris-cortexanalyzer-module). It offers extra functionalities, like multi-analyzer execution, separate job reports, and the addition of tags to the IOCs with the results of the analysis.
 
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-[![your-own-soc-free-for-life-tier](https://img.shields.io/badge/Walkthrough%20Demo-orange)](https://youtu.be/2EMb6zYx7_E)
-[![youtube-channel](https://img.shields.io/badge/YouTube-Build%20Your%20Own%20SIEM%20Stack-red)](https://www.youtube.com/playlist?list=PLB6hQ_WpB6U0WeroZAfssgRpxW8olnkqy)
-
-<!-- PROJECT LOGO -->
-<br />
+<br/>
 <div align="center">
-  <a href="https://www.socfortress.co">
-    <img src="images/cortex-logo.png" alt="Logo">
-  </a>
-
-  <h3 align="center">Cortex Analyzer</h3>
-
-  <p align="center">
-    SOCFortress provided DFIR-IRIS module.
-    <br />
-    <a href="https://www.socfortress.co/contact_form.html"><strong>Contact SOCFortress »</strong></a>
-    <br />
-    <br />
-  </p>
+  <img src="images/cortex-logo.jpeg" alt="Logo">
+  <h3 align="center">DFIR-IRIS Cortex Analyzer Module</h3>
 </div>
 
+## Intro
 
+Use the `Cortex Analyzer` module to run Cortex Analyzers via the DFIR-IRIS platform.
 
+The module was tested with [DFIR-IRIS](https://github.com/dfir-iris/iris-web?tab=readme-ov-file):v 2.4.22 and [Cortex](https://hub.docker.com/r/thehiveproject/cortex/):3.2.1-1.
 
+The module requires a working Cortex instance configured with an organization, a user with the read/analyze roles, and the user's API Key.
 
-<!-- Intro -->
-# Intro
-Use the `Cortex Analyzer` module to run Cortex Analyzers via the DFIR-IRIS platform. </br>
+The module can be configured to run any Analyzer that supports the following IOC types:
 
-> Get started with Cortex: [Video Tutorial](https://youtu.be/SdP-FFjZasI)
++ `IP Address`
++ `Email Address`
++ `Domain`
++ `URL`
++ `Hash (MD5, SHA1, SHA224, SHA256, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHA384, SHA512)`
 
-The module is built for the below IoC types:
-* Ip Address
-* Domain
-* Hash (MD5, SHA224, SHA256, SHA512)
+The module has been tested with the following Analyzers:
 
-**You can configure the module to run any Cortex Analyzer you like.** </br>
++ `AbuseIPDB_1_0`
++ `Abuse_Finder_3_0`
++ `CyberCrime-Tracker_1_0`
++ `Cyberprotect_ThreatScore_3_0`
++ `DShield_lookup_1_0`
++ `Hunterio_DomainSearch_1_0`
++ `Maltiverse_Report_1_0`
++ `MaxMind_GeoIP_4_0`
++ `Mnemonic_pDNS_Public_3_0`
++ `New_DomainMailSPFDMARC_Analyzer_1_1`
++ `OTXQuery_2_0`
++ `Urlscan_io_Search_0_1_1`
++ `VirusTotal_GetReport_3_1`
++ `VirusTotal_Rescan_3_1`
++ `VirusTotal_Scan_3_1`
 
-> ⚠ **You must have the Analyzer enabled within Cortex prior to running the module.**
+> ⚠ **The Analyzers must be enabled within Cortex prior to running the module.**
 
-<div align="center" width="100" height="100">
+## Installation
 
-  <h3 align="center">Configuration</h3>
+The below steps assume you already have your own DFIR-IRIS application up and running.
 
-  <p align="center">
-    <br />
-    <a href="https://github.com/socfortress/iris-cortexanalyzer-module/tree/main/images/conf_cortex.PNG">
-    <img src="images/conf_cortex.PNG">
-    </a>
-    <br />
-    <br />
-  </p>
-</div>
+Fetch the `Cortex Analyzer Module` Repo.
 
-<div align="center" width="100" height="100">
+```bash
+git clone https://github.com/cybersec-ipb-pt/iris-cortexanalyzer-module
+cd iris-cortexanalyzer-module
+```
 
-  <h3 align="center">Results</h3>
+The required binary file can be built from scratch using the following commands:
 
-  <p align="center">
-    <br />
-    <a href="https://github.com/socfortress/iris-cortexanalyzer-module/blob/main/images/cortex_results.PNG">
-    <img src="images/cortex_results.PNG">
-    </a>
-    <br />
-    <br />
-  </p>
-</div>
+```bash
+python3 setup.py bdist_wheel
 
+rm -r build dist iris_cortexanalyzer_module.egg-info
 
-<!-- Install -->
-# Install
-Currently, the Cortex Analyzer module can be ran as `DFIR-IRIS` Module. </br>
+mv dist/iris_cortexanalyzer_module-1.1-py3-none-any.whl /path/to/iris-web/source/dependencies
+```
 
-> Get started with DFIR-IRIS: [Video Tutorial](https://youtu.be/XXyIv_aes4w)
+Or use the pre-compiled [binary](./iris_cortexanalyzer_module-1.1-py3-none-any.whl):
 
-### The below steps assume you already have your own DFIR-IRIS application up and running.
+```bash
+cp iris_cortexanalyzer_module-1.1-py3-none-any.whl /path/to/iris-web/source/dependencies
+```
 
-1. Fetch the `Cortex Analyzer Module` Repo
-    ```
-    git clone https://github.com/socfortress/iris-cortexanalyzer-module
-    cd iris-cortexanalyzer-module
-    ```
-2. Install the module
-    ```
-    ./buildnpush2iris.sh -a
-    ```
+Inside the `iris-web` directory, edit the `docker/webApp/Dockerfile`.
 
-<!-- Configuration -->
-# Configuration
+Locate the following line: 
+
+```Dockerfile
+RUN chmod +x iris-entrypoint.sh
+```
+
+On top of it add the following:
+
+```Dockerfile
+RUN pip3 install /iriswebapp/dependencies/iris_cortexanalyzer_module-1.1-py3-none-any.whl
+```
+
+Edit the `source/app/models/models.py` file.
+
+Locate the following line:
+
+```python
+ioc_tags = Column(String(512))
+```
+
+Update it to the following.
+
+```python
+ioc_tags = Column(String(4096))
+```
+
+This step is required in order for IOC tags field to have enough space for the analysis results to be written. 
+
+Next, execute the following commands to build and start the containers.
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+Execute the following commands to access the database and update the ioc_tags field.
+
+```bash
+docker exec -it iriswebapp_db bash -c "psql -U POSTGRES_USER -d POSTGRES_DB"
+ALTER TABLE ioc
+ALTER COLUMN ioc_tags TYPE VARCHAR(4096);
+```
+
+## Configuration
+
 Once installed, configure the module to include:
-* Cortex API Endpoint (e.g. `http://localhost:9001`)
-* Cortex API Key
-* Cortex Analyzer Name (e.g. `VirusTotal_GetReport_3_0`)
 
++ Cortex API Endpoint (e.g., `http(s)://localhost:9001`)
++ Cortex API Key
++ Cortex Analyzer Names, separated by commas (e.g., `VirusTotal_GetReport_3_1,DShield_lookup_1_0`)
 
-1. Navigate to `Advanced -> Modules`
+1. Navigate to `Advanced -> Modules`.
 
 <div align="center" width="100" height="50">
-
   <h3 align="center">Advanced -> Modules</h3>
-
   <p align="center">
-    <br />
-    <a href="https://github.com/socfortress/ASK-SOCFortress/blob/main/images/module_webui.PNG">
-    <img src="images/module_webui.PNG">
-    </a>
-    <br />
-    <br />
+    <br/>
+    <img src="images/module_webui.jpeg">
+    <br/>
+    <br/>
   </p>
 </div>
 
-2. Add a new module
+2. Add a new module.
 
 <div align="center" width="100" height="50">
-
   <h3 align="center">Add a new module</h3>
-
   <p align="center">
-    <br />
-    <a href="https://github.com/socfortress/ASK-SOCFortress/blob/main/images/add_module.PNG">
-    <img src="images/add_module.PNG">
-    </a>
-    <br />
-    <br />
+    <br/>
+    <img src="images/add_module.jpeg">
+    <br/>
+    <br/>
   </p>
 </div>
 
-3. Input the Module name: `iris_cortexanalyzer_module`
+3. Input the module name: `iris_cortexanalyzer_module`, and click on the `Validate module` button.
 
 <div align="center" width="100" height="50">
-
   <h3 align="center">Input Module</h3>
-
   <p align="center">
-    <br />
-    <a href="https://github.com/socfortress/iris-cortexanalyzer-module/blob/main/images/input3_module.PNG">
-    <img src="images/input3_module.PNG">
-    </a>
-    <br />
-    <br />
+    <br/>
+    <img src="images/input3_module.jpeg">
+    <br/>
+    <br/>
   </p>
 </div>
 
-4. Configure the module
+4. Configure the module, and click on the `Enable module` button.
 
 <div align="center" width="100" height="50">
-
   <h3 align="center">Configure Module</h3>
-
   <p align="center">
-    <br />
-    <a href="https://github.com/socfortress/iris-cortexanalyzer-module/blob/main/images/config_mod.PNG">
-    <img src="images/config_mod.PNG">
-    </a>
-    <br />
-    <br />
+    <br/>
+    <img src="images/config_mod.jpeg">
+    <br/>
+    <br/>
   </p>
 </div>
 
-<!-- Running the module -->
-# Running the Module
-To run the module select `Case -> IOC` and select the dropdown menu. </br>
+## Running the Module
 
-> Module currently supports IoC of type: `ip, domain, hash`
+To run the module select `Case -> IOC` and select the dropdown menu.
 
+> Module currently supports IoC of type: `ip, email, url, domain, hash`
 
 <div align="center" width="100" height="50">
-
   <h3 align="center">IoC</h3>
-
   <p align="center">
-    <br />
-    <a href="https://github.com/socfortress/ASK-SOCFortress/blob/main/images/ioc.PNG">
-    <img src="images/ioc.PNG">
-    </a>
-    <br />
-    <br />
+    <br/>
+    <img src="images/ioc.jpeg">
+    <br/>
+    <br/>
   </p>
 </div>
 
 <div align="center" width="100" height="50">
-
   <h3 align="center">Run Module</h3>
-
   <p align="center">
-    <br />
-    <a href="https://github.com/socfortress/iris-cortexanalyzer-module/blob/main/images/running.PNG">
-    <img src="images/running.PNG">
-    </a>
-    <br />
-    <br />
+    <br/>
+    <img src="images/running.jpeg">
+    <br/>
+    <br/>
   </p>
 </div>
 
-> # Refresh the webpage within your browser. 
-> Auto refresh is coming soon
+> ## Refresh the webpage within your browser. 
 
+<div align="center" width="100" height="100">
+  <h3 align="center">Results</h3>
+    <p align="center">
+    <br/>
+    <img src="images/tags.jpeg">
+    <br/>
+    <br/>
+  </p>
+  <p align="center">
+    <br/>
+    <img src="images/cortex_results.jpeg">
+    <br/>
+    <br/>
+  </p>
+</div>
 
+## Precautions
 
-# Issues?
-> If you are experiencing issues, please contact us at `info@socfortress.co`
+> **`Each time the module is executed, the Cortex Reports tab is updated and the previous information (if any) is removed.`**
 
+> **`Since DFIR-IRIS shares IOCs between cases, an analysis performed on an IOC will be shared. This means that the Cortex Reports tab of an IOC and its tags will be present in other cases. To preserve the analysis performed in each case, it is recommended to take a print of the Cortex Reports tab and store it as evidence.`**
 
+> **`Also, make sure to remove all tags from the IOC before reanalyzing the IOC on a different case.`**
 
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/socfortress/Wazuh-Rules
-[contributors-url]: https://github.com/socfortress/Wazuh-Rules/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/socfortress/Wazuh-Rules
-[forks-url]: https://github.com/socfortress/Wazuh-Rules/network/members
-[stars-shield]: https://img.shields.io/github/stars/socfortress/Wazuh-Rules
-[stars-url]: https://github.com/socfortress/Wazuh-Rules/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/badge/Help%20Desk-Help%20Desk-blue
-[license-url]: https://servicedesk.socfortress.co/help/2979687893
-[linkedin-shield]: https://img.shields.io/badge/Visit%20Us-www.socfortress.co-orange
-[linkedin-url]: https://www.socfortress.co/
+> **`If DFIR-IRIS behavior changes in the future, this will no longer be necessary.`**
